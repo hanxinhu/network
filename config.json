@@ -1,0 +1,20 @@
+[
+  {
+    "routerName": "routerA",
+    "ip": "172.19.241.224",
+    "username": "root",
+    "password": "Nju123456"
+  },
+  {
+    "routerName": "routerB",
+    "ip": "172.19.241.224",
+    "username": "root",
+    "password": "Nju123456"
+  },
+  {
+    "routerName": "routerC",
+    "ip": "172.19.241.224",
+    "username": "root",
+    "password": "Nju123456"
+  }
+]

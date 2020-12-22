@@ -1,0 +1,10 @@
+POST http://localhost:5000/run?router_name=a
+
+
+ls
+
+###
+GET http://localhost:5000/info
+Accept: application/json
+
+###
