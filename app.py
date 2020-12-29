@@ -4,8 +4,8 @@ import os
 from functools import reduce
 import telnetlib
 import time
-app = Flask(__name__)
 import json
+app = Flask(__name__)
 
 class TelnetClient:
     def __init__(self):
@@ -18,7 +18,7 @@ class TelnetClient:
         time.sleep(sleep_seconds)
         return self.tn.read_very_eager().decode('ascii')
 
-    def login(self, host_ip, username, password):
+    def login(self, host_ip, password):
         try:
             self.tn.open(host_ip)
         except:
@@ -137,8 +137,8 @@ ip route 3.3.3.0 255.255.0.0 s2/0
 ip route 172.17.0.0 255.255.0.0 172.18.0.1
 ip route 172.18.0.0 255.255.0.0 s2/0
 exit
+EOF
 """
-
     return s.split("\n")[id]
 
 @app.route('/info', methods=['GET'])
@@ -151,7 +151,7 @@ def get_info():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True, port=5000)
-    # routerA.login('172.19.241.224', 'root', 'Nju123456')
-    # routerB.login('172.19.241.224', 'root', 'Nju123456')
-    # routerC.login('172.19.241.224', 'root', 'Nju123456')
+    # routerA.login('172.16.0.1', '123456')
+    # routerB.login('172.16.0.2',  '123456')
+    # routerC.login('172.16.0.3',  '123456')
 
