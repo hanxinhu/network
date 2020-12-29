@@ -23,8 +23,6 @@ class TelnetClient:
             self.tn.open(host_ip)
         except:
             print('连接失败')
-        self.tn.read_until(b'login: ')
-        self.input(username)
         self.tn.read_until(b'Password: ')
         self.input(password)
         login_result = self.get_output()
@@ -45,6 +43,10 @@ class TelnetClient:
         print(res)
         print("===================")
         return res
+routerA = TelnetClient()
+routerB = TelnetClient()
+routerC = TelnetClient()
+current = routerA
 
 
 @app.route('/run', methods=['GET', 'POST'])
@@ -57,7 +59,7 @@ def run():
         current = routerB
     else:
         current = routerC
-    current.exec_cmd(cmd)
+    res = current.exec_cmd(cmd)
     print(router_name)
     # s = request.get_data(as_text=True)
     # res = os.popen(s)
@@ -146,10 +148,7 @@ def get_info():
     s = "".join([i.strip() for i in string])
     return s
 
-routerA = TelnetClient()
-routerB = TelnetClient()
-routerC = TelnetClient()
-current = routerA
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True, port=5000)
     # routerA.login('172.19.241.224', 'root', 'Nju123456')
