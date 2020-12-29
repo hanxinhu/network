@@ -2,19 +2,19 @@
   {
     "routerName": "routerA",
     "ip": "172.19.241.224",
-    "username": "root",
-    "password": "Nju123456"
+    "password": "Nju123456",
+    "port": "f0/0"
   },
   {
     "routerName": "routerB",
     "ip": "172.19.241.224",
-    "username": "root",
-    "password": "Nju123456"
+    "password": "Nju123456",
+    "port": "f0/0"
   },
   {
     "routerName": "routerC",
     "ip": "172.19.241.224",
-    "username": "root",
-    "password": "Nju123456"
+    "password": "Nju123456",
+    "port": "f0/0"
   }
 ]
