@@ -52,11 +52,12 @@ def run():
     router_name = request.args.get("routerName")
     cmd = request.get_data(as_text=True)
     if router_name == 'routerA':
-        res = routerA.exec_cmd(cmd)
+        current = routerA
     elif router_name == 'routerB':
-        res = routerB.exec_cmd(cmd)
+        current = routerB
     else:
-        res = routerC.exec_cmd(cmd)
+        current = routerC
+    current.exec_cmd(cmd)
     print(router_name)
     # s = request.get_data(as_text=True)
     # res = os.popen(s)
