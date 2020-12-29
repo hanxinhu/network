@@ -5,7 +5,7 @@ from functools import reduce
 import telnetlib
 import time
 app = Flask(__name__)
-
+import json
 
 class TelnetClient:
     def __init__(self):
@@ -66,6 +66,78 @@ def run():
     return res
 
 
+@app.route('/next', methods=['POST'])
+def next():
+    text = request.get_data(as_text=True)
+    obj = json.loads(text)
+    id = obj.nextId
+    command = obj.command
+    nextCommand = getCommand(id+1)
+    output = current.exec_cmd(command)
+    res = {"nextId": id+1, "res":output, "nextCommand": nextCommand}
+    return json.dumps(res)
+
+def getCommand(id):
+    s = """
+telnet 172.16.0.2
+123456
+en
+123456
+conf t
+int loopback0
+ip address 1.1.1.0 255.255.255.0
+int s2/0
+ip adderss 172.17.0.1 255.255.0.0
+clock rate 128000
+no shut
+exit
+ip route 2.2.2.0 255.255.0.0 s2/0
+ip route 3.3.3.0 255.255.0.0 172.17.0.2
+ip route 172.17.0.0 255.255.0.0 s2/0
+ip route 172.18.0.0 255.255.0.0 172.17.0.2
+exit
+telnet 172.16.0.3
+123456
+en
+123456
+conf t
+int loopback0
+ip address 2.2.2.0 255.255.255.0
+int s2/0
+ip adderss 172.17.0.2 255.255.0.0
+clock rate 128000
+no shut
+int s3/0
+ip address 172.18.0.1 255.255.0.0
+clock rate 128000
+no shut
+exit
+ip route 2.2.2.0 255.255.0.0 s2/0
+ip route 3.3.3.0 255.255.0.0 s3/0
+ip route 172.17.0.0 255.255.0.0 s2/0
+ip route 172.18.0.0 255.255.0.0 s3/0
+exit
+telnet 172.16.0.4
+123456
+en
+123456
+conf t
+int loopback0
+ip address 3.3.3.0 255.255.255.0
+int s2/0
+ip adderss 172.17.0.1 255.255.0.0
+clock rate 128000
+no shut
+exit
+ip route 2.2.2.0 255.255.0.0 172.18.0.1
+ip route 3.3.3.0 255.255.0.0 s2/0
+ip route 172.17.0.0 255.255.0.0 172.18.0.1
+ip route 172.18.0.0 255.255.0.0 s2/0
+exit
+"""
+
+    return s.split("\n")[id]
+
 @app.route('/info', methods=['GET'])
 def get_info():
     f = open('./config.json', encoding='utf-8')
@@ -76,8 +148,9 @@ def get_info():
 routerA = TelnetClient()
 routerB = TelnetClient()
 routerC = TelnetClient()
+current = routerA
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(host='0.0.0.0', debug=True, port=5000)
     # routerA.login('172.19.241.224', 'root', 'Nju123456')
     # routerB.login('172.19.241.224', 'root', 'Nju123456')
     # routerC.login('172.19.241.224', 'root', 'Nju123456')
