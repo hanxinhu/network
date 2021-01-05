@@ -103,15 +103,15 @@ en
 123456
 conf t
 int loopback0
-ip address 1.1.1.0 255.255.255.0
-int s2/0
-ip adderss 172.17.0.1 255.255.0.0
+ip address 1.1.1.0 255.0.0.0
+int s0/0/0
+ip address 172.17.0.1 255.255.0.0
 clock rate 128000
 no shut
 exit
-ip route 2.2.2.0 255.255.0.0 s2/0
-ip route 3.3.3.0 255.255.0.0 172.17.0.2
-ip route 172.17.0.0 255.255.0.0 s2/0
+ip route 2.2.2.0 255.255.255.0 s0/0/0
+ip route 3.3.3.0 255.255.255.0 172.17.0.2
+ip route 172.17.0.0 255.255.0.0 s0/0/0
 ip route 172.18.0.0 255.255.0.0 172.17.0.2
 exit
 """
@@ -122,20 +122,20 @@ en
 123456
 conf t
 int loopback0
-ip address 2.2.2.0 255.255.255.0
-int s2/0
-ip adderss 172.17.0.2 255.255.0.0
+ip address 2.2.2.0 255.0.0.0
+int s0/0/0
+ip address 172.17.0.2 255.255.0.0
 clock rate 128000
 no shut
-int s3/0
+int s0/0/1
 ip address 172.18.0.1 255.255.0.0
 clock rate 128000
 no shut
 exit
-ip route 2.2.2.0 255.255.0.0 s2/0
-ip route 3.3.3.0 255.255.0.0 s3/0
-ip route 172.17.0.0 255.255.0.0 s2/0
-ip route 172.18.0.0 255.255.0.0 s3/0
+ip route 2.2.2.0 255.255.255.0 s0/0/0
+ip route 3.3.3.0 255.255.255.0 s0/0/1
+ip route 172.17.0.0 255.255.0.0 s0/0/0
+ip route 172.18.0.0 255.255.0.0 s0/0/1
 exit
 """
     s3 = """
@@ -145,22 +145,22 @@ en
 123456
 conf t
 int loopback0
-ip address 3.3.3.0 255.255.255.0
-int s2/0
-ip adderss 172.17.0.1 255.255.0.0
+ip address 3.3.3.0 255.0.0.0
+int s0/0/0
+ip address 172.18.0.2 255.255.0.0
 clock rate 128000
 no shut
 exit
-ip route 2.2.2.0 255.255.0.0 172.18.0.1
-ip route 3.3.3.0 255.255.0.0 s2/0
+ip route 2.2.2.0 255.255.255.0 172.18.0.1
+ip route 3.3.3.0 255.255.255.0 s0/0/0
 ip route 172.17.0.0 255.255.0.0 172.18.0.1
-ip route 172.18.0.0 255.255.0.0 s2/0
+ip route 172.18.0.0 255.255.0.0 s0/0/0
 exit
 """
     l = list()
     l.append(s1.split("\n"))
-    l.append(s1.split("\n"))
-    l.append(s1.split("\n"))
+    l.append(s2.split("\n"))
+    l.append(s3.split("\n"))
     length = len(l[index % len(l)])
     return l[index % len(l)][id % length], length
 
