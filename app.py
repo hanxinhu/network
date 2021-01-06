@@ -89,7 +89,7 @@ def next():
         index = 1
     else:
         index = 2
-    nextCommand, sum = getCommand(id + 1)
+    nextCommand, sum = getCommand(id + 1, index)
     output = current.exec_cmd(command)
     res = {"nextId": (id + 1) % sum, "res": output, "nextCommand": nextCommand}
     return json.dumps(res)
